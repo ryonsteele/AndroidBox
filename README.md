@@ -6,3 +6,6 @@
 Will update this as things are added.
 
 * Sunshine Test - App used during Udacity course work by Google. Test Repo Code.
+
+* Politipoint - App that uses ProRepublica API to list information about various politicians. 
+   WIP - Direction and design undetermined.
