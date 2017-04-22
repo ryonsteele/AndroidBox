@@ -25,32 +25,32 @@ public class SplashInteractorImpl implements SplashInteractor {
 
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
+                listener.onSuccess();
 
-
-                MemberService serviceAPI = RestClient.getClient();
-                Call<CongressResults> loadSizeCall = serviceAPI.loadSenate();
-                loadSizeCall.enqueue(new Callback<CongressResults>() {
-                    @Override
-                    public void onResponse(Call<CongressResults> call, Response<CongressResults > response) {
-
-                        CongressResults test = response.body();
-                        Result result = test.getResults().get(0);
-                        members = result.getMembers();
-
-                        for(Member temp : members){
-                            System.out.println(temp.getFirstName() + " "  + temp.getLastName() + " :" + temp.getId());
-                        }
-                        if (members != null){
-                            listener.onSuccess();
-                        }//todo else handle
-                    }
-
-                    @Override
-                    public void onFailure(Call<CongressResults> call, Throwable t) {
-                        System.out.println(t.getMessage());
-                        error = true;
-                    }
-                });
+//                MemberService serviceAPI = RestClient.getClient();
+//                Call<CongressResults> loadSizeCall = serviceAPI.loadSenate();
+//                loadSizeCall.enqueue(new Callback<CongressResults>() {
+//                    @Override
+//                    public void onResponse(Call<CongressResults> call, Response<CongressResults > response) {
+//
+//                        CongressResults test = response.body();
+//                        Result result = test.getResults().get(0);
+//                        members = result.getMembers();
+//
+//                        for(Member temp : members){
+//                            System.out.println(temp.getFirstName() + " "  + temp.getLastName() + " :" + temp.getId());
+//                        }
+//                        if (members != null){
+//                            listener.onSuccess();
+//                        }//todo else handle
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<CongressResults> call, Throwable t) {
+//                        System.out.println(t.getMessage());
+//                        error = true;
+//                    }
+//                });
             }
         }, 2000);
     }
