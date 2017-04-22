@@ -6,51 +6,51 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.politipoint.android.models.ContactInfo;
 import com.politipoint.android.app.R;
+import com.politipoint.android.models.Member;
 
 import java.util.List;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
+public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberViewHolder> {
 
-    private List<ContactInfo> contactList;
+    private List<Member> memberList;
 
-    public ContactAdapter(List<ContactInfo> contactList) {
-        this.contactList = contactList;
+    public MemberAdapter(List<Member> contactList) {
+        this.memberList = contactList;
     }
 
 
     @Override
     public int getItemCount() {
-        return contactList.size();
+        return memberList.size();
     }
 
     @Override
-    public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
-        ContactInfo ci = contactList.get(i);
-        contactViewHolder.vName.setText(ci.name);
-        contactViewHolder.vSurname.setText(ci.surname);
-        contactViewHolder.vEmail.setText(ci.email);
-        contactViewHolder.vTitle.setText(ci.name + " " + ci.surname);
+    public void onBindViewHolder(MemberViewHolder contactViewHolder, int i) {
+        Member ci = memberList.get(i);
+        contactViewHolder.vName.setText(ci.getFirstName());
+        contactViewHolder.vSurname.setText(ci.getLastName());
+        contactViewHolder.vEmail.setText(ci.getOffice());
+        contactViewHolder.vTitle.setText(ci.getFirstName() + " " + ci.getLastName());
     }
 
     @Override
-    public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public MemberViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_layout, viewGroup, false);
 
-        return new ContactViewHolder(itemView);
+        return new MemberViewHolder(itemView);
     }
 
-    public static class ContactViewHolder extends RecyclerView.ViewHolder {
+    public static class MemberViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView vName;
         protected TextView vSurname;
         protected TextView vEmail;
         protected TextView vTitle;
 
-        public ContactViewHolder(View v) {
+        public MemberViewHolder(View v) {
             super(v);
             vName =  (TextView) v.findViewById(R.id.txtName);
             vSurname = (TextView)  v.findViewById(R.id.txtSurname);

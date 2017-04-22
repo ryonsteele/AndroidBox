@@ -1,5 +1,7 @@
 package com.politipoint.android.main;
 
+import com.politipoint.android.models.Member;
+
 import java.util.List;
 
 public class MainPresenterImpl implements MainPresenter, FindItemsInteractor.OnFinishedListener {
@@ -30,7 +32,7 @@ public class MainPresenterImpl implements MainPresenter, FindItemsInteractor.OnF
         mainView = null;
     }
 
-    @Override public void onFinished(List<String> items) {
+    @Override public void onFinished(List<Member> items) {
         if (mainView != null) {
             mainView.setItems(items);
             mainView.hideProgress();

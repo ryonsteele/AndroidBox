@@ -1,5 +1,7 @@
 package com.politipoint.android.main;
 
+import com.politipoint.android.models.Member;
+
 import java.util.List;
 
 public interface MainView {
@@ -8,7 +10,7 @@ public interface MainView {
 
     void hideProgress();
 
-    void setItems(List<String> items);
+    void setItems(List<Member> items);
 
     void showMessage(String message);
 }

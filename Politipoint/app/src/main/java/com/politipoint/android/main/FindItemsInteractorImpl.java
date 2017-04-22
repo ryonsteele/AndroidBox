@@ -1,31 +1,47 @@
 package com.politipoint.android.main;
 
 import android.os.Handler;
-
-import java.util.Arrays;
+import com.politipoint.android.Util.MemberService;
+import com.politipoint.android.Util.RestClient;
+import com.politipoint.android.models.CongressResults;
+import com.politipoint.android.models.Member;
+import com.politipoint.android.models.Result;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FindItemsInteractorImpl implements FindItemsInteractor {
+
+    public List<Member> members;
+
     @Override public void findItems(final OnFinishedListener listener) {
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
-                listener.onFinished(createArrayList());
+
+                MemberService serviceAPI = RestClient.getClient();
+                Call<CongressResults> loadSizeCall = serviceAPI.loadSenate();
+                loadSizeCall.enqueue(new Callback<CongressResults>() {
+                    @Override
+                    public void onResponse(Call<CongressResults> call, Response<CongressResults > response) {
+
+                        CongressResults test = response.body();
+                        Result result = test.getResults().get(0);
+                        members = result.getMembers();
+
+                        if (members != null){
+                            listener.onFinished(members);
+
+                        }//todo else handle
+                    }
+
+                    @Override
+                    public void onFailure(Call<CongressResults> call, Throwable t) {
+                        System.out.println(t.getMessage());
+                    }
+                });
             }
         }, 2000);
-    }
-
-    private List<String> createArrayList() {
-        return Arrays.asList(
-                "Item 1",
-                "Item 2",
-                "Item 3",
-                "Item 4",
-                "Item 5",
-                "Item 6",
-                "Item 7",
-                "Item 8",
-                "Item 9",
-                "Item 10"
-        );
     }
 }
