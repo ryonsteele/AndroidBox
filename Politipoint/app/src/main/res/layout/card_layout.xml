@@ -18,17 +18,20 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#980c0c">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="#EEE9E9"
-            android:text="contact det"
+            android:layout_height="35dp"
+            android:background="#6D0610"
+            android:text="Senate"
             android:gravity="center_vertical"
-            android:textColor="@android:color/white"
-            android:textSize="14dp"/>
+            android:textColor="#081076"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="25sp"/>
 
         <TextView
             android:id="@+id/txtName"
@@ -36,42 +39,54 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:gravity="center_vertical"
-            android:textSize="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#081076"
             android:layout_below="@id/title"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"/>
 
+
         <TextView
-            android:id="@+id/txtSurname"
+            android:id="@+id/txtStateLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Surname"
-            android:gravity="center_vertical"
-            android:textSize="10dp"
+            android:text="State: "
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
             android:layout_below="@id/txtName"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp"
-            />
+            android:layout_marginLeft="5dp"/>
 
         <TextView
-            android:id="@+id/txtEmail"
+            android:id="@+id/txtState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email"
-            android:textSize="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="150dp"
-            android:layout_alignBaseline="@id/txtName"/>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@id/txtStateLabel"
+            android:layout_alignBaseline="@id/txtStateLabel"
+            android:layout_below="@id/txtName"/>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_senate"
+            android:layout_below="@id/txtStateLabel"/>
 
         <TextView
-            android:id="@+id/txtAdd"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtTapDetail"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Address"
-            android:textSize="10dp"
-            android:layout_alignStart="@id/txtEmail"
-            android:layout_alignBaseline="@id/txtSurname"/>
+            android:text="Tap Card To Learn More!"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_below="@id/imageView1"/>
 
     </RelativeLayout>
 

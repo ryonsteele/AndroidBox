@@ -14,7 +14,7 @@ import com.politipoint.android.app.R;
 import com.politipoint.android.models.Member;
 import java.util.List;
 
-public class MainActivity extends Activity implements MainView, AdapterView.OnItemClickListener {
+public class MainActivity extends Activity implements MainView, RecyclerView.OnClickListener {
 
 //    private ListView listView;
 //    private ProgressBar progressBar;
@@ -28,6 +28,7 @@ public class MainActivity extends Activity implements MainView, AdapterView.OnIt
         setContentView(R.layout.activity_my);
         recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
+        recList.setOnClickListener(this);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
@@ -76,7 +77,7 @@ public class MainActivity extends Activity implements MainView, AdapterView.OnIt
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        presenter.onItemClicked(position);
+    @Override public void onClick(View view) {
+        presenter.onItemClicked(recList.getChildLayoutPosition(view));
     }
 }
