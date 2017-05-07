@@ -16,3 +16,7 @@ Will update this as things are added.
    Image and color are strictly placeholder. Focused on functionality.
    
    Status - WIP  Direction and design undetermined.
+   
+* OffBeat - Search Engine query tool to filter out fast food, chains etc. Leaving places possibly otherwise unheard. 
+   
+   Status - Barley started, design undetermined.
