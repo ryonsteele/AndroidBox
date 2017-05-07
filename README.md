@@ -13,7 +13,7 @@ Will update this as things are added.
    Status - Feature Complete, Functional. Needs bit of cleanup and do something with the output like gallery drop.
    
    ![](Screenshots/BWTiffImaging/multigrid.png?raw=true =250x)
-   <img src="Screenshots/BWTiffImaging/multigrid.png" alt="Drawing" style="width: 100px;"/>
+   <img src="Screenshots/BWTiffImaging/multigrid.png" alt="Drawing" style="width: 50px;"/>
    
    Add multiple images, the output will be a Black and White tiff with Fax4 Compression.
    
