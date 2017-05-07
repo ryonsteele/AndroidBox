@@ -16,7 +16,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginLeft="20dp"
         android:padding="16dp"
-        android:text="text1"
+        android:text="Name: "
         android:textColor="#000000"
         android:textStyle="bold"/>
 
@@ -31,22 +31,22 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/labelDetailOffice"
+        android:id="@+id/labelDetailTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:padding="16dp"
-        android:text="text3"
+        android:text="Title: "
         android:textColor="#000000"
         android:textStyle="bold"
         android:layout_below="@+id/labelDetailName" />
 
     <TextView
-        android:id="@+id/txtDetailOffice"
+        android:id="@+id/txtDetailTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/labelDetailOffice"
-        android:layout_alignBaseline="@+id/labelDetailOffice"
+        android:layout_toRightOf="@+id/labelDetailTitle"
+        android:layout_alignBaseline="@+id/labelDetailTitle"
         android:text="text2"
         android:textColor="#081076"
         android:textStyle="bold"/>

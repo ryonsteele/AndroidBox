@@ -21,7 +21,7 @@ public class DetailsActivity extends Activity {
     private List<Role> rolesList;
 
     private TextView vName;
-    private TextView vOffice;
+    private TextView vTitle;
 
 
     @Override
@@ -40,10 +40,10 @@ public class DetailsActivity extends Activity {
     public void fillUI(){
 
         vName =  (TextView) findViewById(R.id.txtDetailName);
-        vOffice = (TextView)  findViewById(R.id.txtDetailOffice);
+        vTitle = (TextView)  findViewById(R.id.txtDetailTitle);
 
         vName.setText(dataDetail.getFirstName() + " " + dataDetail.getMiddleName() + " " + dataDetail.getLastName());
-        vOffice.setText(rolesList.get(0).getOffice());
+        vTitle.setText(rolesList.get(0).getTitle());
 
     }
 }
