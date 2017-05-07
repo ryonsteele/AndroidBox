@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+     <Button
+         android:id="@+id/btnCaptureImage"
+		 style="@style/standard_button"
+         android:text="@string/dialog_attachment_capture" />
+     
+     <Button
+         android:id="@+id/btnSelectImage"
+         style="@style/standard_button"
+         android:text="@string/dialog_attachment_image" />     
+     
+     <Button
+         android:id="@+id/btnSelectFile"
+         style="@style/standard_button"
+         android:text="@string/dialog_attachment_file" />
+    
+</LinearLayout>

@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lmeApp="http://schemas.android.com/apk/res-auto" >
+    <item android:id="@+id/menu_send"
+        android:orderInCategory="1"
+        android:title="Send"
+        android:icon="@drawable/send"
+        lmeApp:showAsAction="always" />
+    <item android:id="@+id/menu_reply"
+        android:orderInCategory="1"
+        android:title="Reply"
+        android:icon="@drawable/reply"
+        lmeApp:showAsAction="ifRoom|withText" />
+</menu>

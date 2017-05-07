@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BWTiffImaging</string>
+    <string name="image_pages">Image Pages</string>
+    <string name="activity_create_image_title">Add Image</string>
+    <string name="tag">BWTiffImaging</string>
+    <string name="dialog_attachment_capture">Capture Image</string>
+    <string name="dialog_attachment_image">Select Image</string>
+    <string name="dialog_attachment_file">Select File</string>
+</resources>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ff000000"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <android.ryons.com.bwtiffimaging.imaging.ZoomableImageView
+            android:id="@+id/imageView"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="0.7"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+
+        <!--<com.tms.android.imaging.ZoomableGPUImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_above="@+id/buttonGroup"-->
+        <!--android:layout_marginBottom="0dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+        <LinearLayout
+            android:id="@+id/buttonGroup"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".15"
+            >
+
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_weight=".25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:text="Default Threshold" />
+
+            <ImageButton
+                android:id="@+id/button2"
+                android:layout_weight=".25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:text="Simple\n Edge Detect" />
+
+            <ImageButton
+                android:id="@+id/button3"
+                android:layout_weight=".25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:text="Complex\n Edge Detect" />
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/button4"-->
+                <!--android:layout_weight=".25"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:scaleType="centerInside"-->
+                <!--android:text="Complex\n Edge Detect" />-->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonGroup2"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight=".15"
+            >
+
+            <!--<SeekBar-->
+                <!--android:id="@+id/seekBar1"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_marginBottom="0dp"-->
+                <!--android:drawingCacheQuality="high"-->
+                <!--android:layerType="hardware"-->
+                <!--android:max="400"-->
+                <!--android:progressDrawable="@drawable/progress"-->
+                <!--android:thumb="@drawable/thumb" />-->
+
+            <Button
+                android:id="@+id/button5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00b33c"
+                android:text="Apply Filter" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <include layout="@layout/progress" />
+
+</RelativeLayout>
