@@ -28,6 +28,14 @@ Will update this as things are added.
    
    Pinch to zoom to get a detailed look.
    
+   Works Cited - Tools and Libraries used:
+   
+   https://github.com/Beyka/Android-TiffBitmapFactory - Multipage Tiff creation
+   https://github.com/CyberAgent/android-gpuimage     - Some filter usage
+   opencv_java3
+   
+   
+   
    
    
 
