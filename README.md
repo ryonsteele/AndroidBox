@@ -12,19 +12,19 @@ Will update this as things are added.
    
    Status - Feature Complete, Functional. Needs bit of cleanup and do something with the output like gallery drop.
    
-   ![](Screenshots/BWTiffImaging/multigrid.png?raw=true)
+   ![](Screenshots/BWTiffImaging/multigrid.png?raw=true =250x)
    
    Add multiple images, the output will be a Black and White tiff with Fax4 Compression.
    
-   ![](Screenshots/BWTiffImaging/cropper.png?raw=true)
+   ![](Screenshots/BWTiffImaging/cropper.png?raw=true =250x)
    
    Universal crop tool with edge detection, rotation and deskew.
    
-   ![](Screenshots/BWTiffImaging/preview.png?raw=true)
+   ![](Screenshots/BWTiffImaging/preview.png?raw=true =250x)
    
    Preview after crop with some filter options (First is best for 90% of documents)
    
-   ![](Screenshots/BWTiffImaging/zoomable.png?raw=true)
+   ![](Screenshots/BWTiffImaging/zoomable.png?raw=true =250x)
    
    Pinch to zoom to get a detailed look.
    
