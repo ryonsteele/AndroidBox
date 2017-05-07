@@ -46,6 +46,8 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         //contactViewHolder.vStateLabel.setText(ci.getLastName());
         contactViewHolder.vState.setText(ci.getState());
         //contactViewHolder.vTitle.setText(ci.getFirstName() + " " + ci.getLastName());
+        contactViewHolder.vName.setTag(Integer.valueOf(i));
+        getViewAdapterPosition();
     }
 
     @Override
@@ -61,8 +63,13 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer position;
+
+                     position = (Integer) v.getTag();
+                getViewAdapterPosition();
+
                 MemberService serviceAPI = RestClient.getClient();
-                Call<DetailResults> loadSizeCall = serviceAPI.loadSenateDetail(memberList.get(temp).getId());
+                Call<DetailResults> loadSizeCall = serviceAPI.loadSenateDetail(memberList.get(position).getId());
                 loadSizeCall.enqueue(new Callback<DetailResults>() {
                     @Override
                     public void onResponse(Call<DetailResults> call, Response<DetailResults > response) {
@@ -82,7 +89,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
             }
         });
 
-        return new MemberViewHolder(itemView);
+        return new MemberViewHolder(itemView, i);
     }
 
     public void startDetails(SenateDetail result){
@@ -100,12 +107,15 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberView
         protected TextView vState;
         protected TextView vTitle;
 
-        public MemberViewHolder(View v) {
+        public MemberViewHolder(View v, int i) {
             super(v);
+
             vName =  (TextView) v.findViewById(R.id.txtName);
             vStateLabel = (TextView)  v.findViewById(R.id.txtStateLabel);
             vState = (TextView)  v.findViewById(R.id.txtState);
             vTitle = (TextView) v.findViewById(R.id.title);
+            vName.setTag(Integer.valueOf(i));
+            getViewAdapterPosition();
         }
     }
 }
