@@ -1,6 +1,6 @@
 package com.politipoint.android.Login;
 
-public class SplashPresenterImpl implements SplashPresenter, SplashInteractor.OnLoginFinishedListener {
+public class SplashPresenterImpl implements SplashPresenter, SplashInteractor.OnSplashFinishedListener {
 
     private SplashView splashView;
     private SplashInteractor splashInteractor;
@@ -10,12 +10,12 @@ public class SplashPresenterImpl implements SplashPresenter, SplashInteractor.On
         this.splashInteractor = new SplashInteractorImpl();
     }
 
-    @Override public void validateCredentials() {
+    @Override public void validate() {
         if (splashView != null) {
             splashView.showProgress();
         }
 
-        splashInteractor.login(this);
+        splashInteractor.GoHome(this);
     }
 
     @Override public void onDestroy() {

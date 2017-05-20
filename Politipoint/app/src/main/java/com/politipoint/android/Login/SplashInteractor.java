@@ -2,10 +2,10 @@ package com.politipoint.android.Login;
 
 public interface SplashInteractor {
 
-    interface OnLoginFinishedListener {
+    interface OnSplashFinishedListener {
         void onSuccess();
     }
 
-    void login(OnLoginFinishedListener listener);
+    void GoHome(OnSplashFinishedListener listener);
 
 }

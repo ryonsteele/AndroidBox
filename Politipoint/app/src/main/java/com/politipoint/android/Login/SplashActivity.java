@@ -23,7 +23,7 @@ public class SplashActivity extends Activity implements SplashView {
 
         presenter = new SplashPresenterImpl(this);
 
-        presenter.validateCredentials();
+        presenter.validate();
     }
 
     @Override protected void onDestroy() {
