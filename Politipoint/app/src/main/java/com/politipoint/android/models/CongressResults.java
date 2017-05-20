@@ -11,7 +11,7 @@ public class CongressResults {
     private String status;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<Member> results = null;
 
 
     public String getStatus() {
@@ -22,11 +22,11 @@ public class CongressResults {
         this.status = status;
     }
 
-    public List<Result> getResults() {
+    public List<Member> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(List<Member> results) {
         this.results = results;
     }
 

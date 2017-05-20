@@ -3,6 +3,10 @@ package com.politipoint.android.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,7 @@ import com.politipoint.android.models.DetailResults;
 import com.politipoint.android.models.Member;
 import com.politipoint.android.models.SenateDetail;
 
+import java.io.InputStream;
 import java.util.List;
 
 import retrofit2.Call;
@@ -105,6 +111,7 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
             this.memberList = contactList;
         }
 
+        public Bitmap bmp;
 
         @Override
         public int getItemCount() {
@@ -114,12 +121,36 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
         @Override
         public void onBindViewHolder(MemberViewHolder contactViewHolder, int i) {
             Member ci = memberList.get(i);
-            contactViewHolder.vName.setText(ci.getFirstName()+" "+ ci.getMiddleName() + " "+ ci.getLastName() + " (" + ci.getParty() + ")");
+            contactViewHolder.vName.setText(ci.getName()+ " (" + ci.getParty() + ")");
             //contactViewHolder.vStateLabel.setText(ci.getLastName());
-            contactViewHolder.vState.setText(ci.getState());
+            contactViewHolder.vState.setText(ci.getRole());
             //contactViewHolder.vTitle.setText(ci.getFirstName() + " " + ci.getLastName());
+            new DownloadImageTask((ImageView)  contactViewHolder.vImage).execute("http://vote-al.org/Image.aspx?Id=ALSessionsJeff&Col=Headshot100&Def=Headshot100");
             contactViewHolder.vName.setTag(Integer.valueOf(i));
         }
+
+        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+            ImageView bmImage;
+
+            public DownloadImageTask(ImageView bmImage) {
+                this.bmImage = bmImage;
+            }
+
+            protected Bitmap doInBackground(String... urls) {
+                String urldisplay = urls[0];
+                Bitmap mIcon11 = null;
+                try {
+                    InputStream in = new java.net.URL(urldisplay).openStream();
+                    mIcon11 = BitmapFactory.decodeStream(in);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return mIcon11;
+            }
+
+            protected void onPostExecute(Bitmap result) {
+                bmImage.setImageBitmap(Bitmap.createScaledBitmap(result, 400, 500, false));
+            }}
 
         @Override
         public MemberAdapter.MemberViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -149,6 +180,7 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
             protected TextView vStateLabel;
             protected TextView vState;
             protected TextView vTitle;
+            protected ImageView vImage;
 
             public MemberViewHolder(View v, int i) {
                 super(v);
@@ -157,6 +189,7 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
                 vStateLabel = (TextView)  v.findViewById(R.id.txtStateLabel);
                 vState = (TextView)  v.findViewById(R.id.txtState);
                 vTitle = (TextView) v.findViewById(R.id.title);
+                vImage = (ImageView) v.findViewById(R.id.imageView1);
                 vName.setTag(Integer.valueOf(i));
 
                 itemView.setOnClickListener(new View.OnClickListener() {
