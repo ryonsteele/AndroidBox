@@ -6,6 +6,8 @@ import com.politipoint.android.Util.RestClient;
 import com.politipoint.android.models.CongressResults;
 import com.politipoint.android.models.Member;
 import com.politipoint.android.models.Result;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -14,34 +16,47 @@ import retrofit2.Response;
 
 public class FindItemsInteractorImpl implements FindItemsInteractor {
 
-    public List<Member> members;
+    public List<Member> members = new ArrayList<Member>();
 
     @Override public void findItems(final OnFinishedListener listener) {
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
 
                 MemberService serviceAPI = RestClient.getClient();
-                Call<CongressResults> loadSizeCall = serviceAPI.loadSenate();
-                loadSizeCall.enqueue(new Callback<CongressResults>() {
-                    @Override
-                    public void onResponse(Call<CongressResults> call, Response<CongressResults > response) {
+                List<String> states = new ArrayList<String>();
+                states.add("AL");
+                states.add("FL");
 
-                        CongressResults test = response.body();
-                        Result result = test.getResults().get(0);
-                        members = result.getMembers();
+                for(String state : states) {
+                    Call<CongressResults> loadSizeCall = serviceAPI.loadSenate(state);
+                    loadSizeCall.enqueue(new Callback<CongressResults>() {
+                        @Override
+                        public void onResponse(Call<CongressResults> call, Response<CongressResults> response) {
 
-                        if (members != null){
-                            listener.onFinished(members);
+                            CongressResults test = response.body();
+                            Result result = test.getResults().get(0);
+//                        members = result.getMembers();
+                            members.addAll(result.getMembers());
 
-                        }//todo else handle
-                    }
+//                        if (members != null){
+//                            listener.onFinished(members);
 
-                    @Override
-                    public void onFailure(Call<CongressResults> call, Throwable t) {
-                        System.out.println(t.getMessage());
-                    }
-                });
+//                        }//todo else handle
+                        }
+
+                        @Override
+                        public void onFailure(Call<CongressResults> call, Throwable t) {
+                            System.out.println(t.getMessage());
+                        }
+                    });
+                }
+
+//                if (members != null)
+//                    listener.onFinished(members);
             }
         }, 2000);
+
+        if (members != null)
+            listener.onFinished(members);
     }
 }

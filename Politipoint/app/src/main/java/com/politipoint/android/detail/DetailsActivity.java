@@ -22,6 +22,7 @@ public class DetailsActivity extends Activity {
 
     private TextView vName;
     private TextView vTitle;
+    private TextView vParty;
 
 
     @Override
@@ -41,9 +42,16 @@ public class DetailsActivity extends Activity {
 
         vName =  (TextView) findViewById(R.id.txtDetailName);
         vTitle = (TextView)  findViewById(R.id.txtDetailTitle);
+        vParty = (TextView)  findViewById(R.id.txtDetailParty);
 
         vName.setText(dataDetail.getFirstName() + " " + dataDetail.getMiddleName() + " " + dataDetail.getLastName());
         vTitle.setText(rolesList.get(0).getTitle());
+        if(rolesList.get(0).getParty().equalsIgnoreCase("R"))
+            vParty.setText("Republican Party");
+        else if(rolesList.get(0).getParty().equalsIgnoreCase("D"))
+            vParty.setText("Democratic Party");
+        else
+            vParty.setText("Independent");
 
     }
 }

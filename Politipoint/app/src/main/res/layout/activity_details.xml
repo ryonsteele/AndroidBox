@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:background="@drawable/background_border">
 
+    <!-- ****** Name ****** -->
 
     <TextView
         android:id="@+id/labelDetailName"
@@ -15,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:layout_marginLeft="20dp"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
         android:text="Name: "
         android:textColor="#000000"
         android:textStyle="bold"/>
@@ -26,16 +28,22 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/labelDetailName"
         android:layout_alignBaseline="@+id/labelDetailName"
-        android:text="text2"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        android:gravity="right"
+        android:text="No data available."
         android:textColor="#081076"
         android:textStyle="bold"/>
+
+    <!-- ****** Title ****** -->
 
     <TextView
         android:id="@+id/labelDetailTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
         android:text="Title: "
         android:textColor="#000000"
         android:textStyle="bold"
@@ -47,7 +55,37 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/labelDetailTitle"
         android:layout_alignBaseline="@+id/labelDetailTitle"
-        android:text="text2"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        android:gravity="right"
+        android:text="No data available."
+        android:textColor="#081076"
+        android:textStyle="bold"/>
+
+    <!-- ****** Party ****** -->
+
+    <TextView
+        android:id="@+id/labelDetailParty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="Party: "
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/labelDetailTitle" />
+
+    <TextView
+        android:id="@+id/txtDetailParty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/labelDetailParty"
+        android:layout_alignBaseline="@+id/labelDetailParty"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        android:gravity="right"
+        android:text="No data available."
         android:textColor="#081076"
         android:textStyle="bold"/>
 

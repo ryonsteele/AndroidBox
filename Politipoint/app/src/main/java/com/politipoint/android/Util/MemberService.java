@@ -19,8 +19,11 @@ public interface MemberService {
 //    @GET("candidates")
 //    Call<List<Candidate>> loadCandidates();
 
-    @GET("80-115/senate/members.json")
-     Call<CongressResults> loadSenate();
+//    @GET("80-115/senate/members.json")
+//     Call<CongressResults> loadSenate();
+
+    @GET("members/senate/{state}/current.json")
+    Call<CongressResults> loadSenate(@Path(value = "state", encoded = true) String state);
 
     @GET("members/{member_id}.json")
     Call<DetailResults> loadSenateDetail(@Path(value = "member_id", encoded = true) String memberid);
