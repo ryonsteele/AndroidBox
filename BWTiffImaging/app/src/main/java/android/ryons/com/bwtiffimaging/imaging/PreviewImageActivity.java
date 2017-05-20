@@ -4,17 +4,21 @@ package android.ryons.com.bwtiffimaging.imaging;
 import android.ryons.com.bwtiffimaging.R;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -28,11 +32,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
+import jp.co.cyberagent.android.gpuimage.GPUImageBilateralFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageBoxBlurFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageColorInvertFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageContrastFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilterGroup;
+import jp.co.cyberagent.android.gpuimage.GPUImageGaussianBlurFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageLevelsFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageSobelEdgeDetection;
 import jp.co.cyberagent.android.gpuimage.GPUImageSubtractBlendFilter;
@@ -40,16 +47,18 @@ import jp.co.cyberagent.android.gpuimage.GPUImageThresholdEdgeDetection;
 
 public class PreviewImageActivity extends Activity {
 
-private String sPath = null;
+    private String sPath = null;
     ImageButton btnFilter1;
     ImageButton btnFilter2;
     ImageButton btnFilter3;
+    ImageButton btnFilter4;
     Button btnSelect;
     ZoomableImageView touch;
     Bitmap imagePreview;
     Bitmap imageFiltered;
     Bitmap imageBlank;
-   // SeekBar seekBar;
+    Bitmap Imgbutton1, Imgbutton2, Imgbutton3, Imgbutton4;
+    // SeekBar seekBar;
     List<GPUImageFilter> filters = new ArrayList<>();
     int value=0;
     Float contLevelFloat = null;
@@ -63,7 +72,6 @@ private String sPath = null;
     float mBlurFactor = 0.125f;
     float mContrast = 1.2f;
 
-    boolean isFirstSeekbarTouch = true;
 
 
     @Override
@@ -77,6 +85,7 @@ private String sPath = null;
         btnFilter1 = (ImageButton)findViewById(R.id.button1);
         btnFilter2 = (ImageButton)findViewById(R.id.button2);
         btnFilter3 = (ImageButton)findViewById(R.id.button3);
+        btnFilter4 = (ImageButton)findViewById(R.id.button4);
         btnSelect = (Button)findViewById(R.id.button5);
 
         touch = (ZoomableImageView)findViewById(R.id.imageView);
@@ -87,6 +96,18 @@ private String sPath = null;
         String path = i.getStringExtra("message");
         sPath=path;
 
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        progress.setVisibility(View.VISIBLE);
+        try{   //decode tmp image in internal
+            File f=new File(path, "tmp1.jpg");
+            imagePreview = BitmapFactory.decodeStream(new FileInputStream(f));
+
+        } catch (FileNotFoundException e) {
+            Log.e("PreviewImageActivity", "LoadMainImageTask: Failed to load and decode preview image.", e);
+        }
+
 
         new LoadMainImageTask().execute(sPath);
 
@@ -95,7 +116,6 @@ private String sPath = null;
         isSobelFilter = false;
         isEdgeFilter = false;
         isEdgeDifference = false;
-        isFirstSeekbarTouch = true;
 
         //set preview on click
         btnFilter1.setOnClickListener(new View.OnClickListener() {
@@ -108,9 +128,53 @@ private String sPath = null;
                 touch.setImageBitmap(getButton1FilteredImage());
             }
         });
+        btnFilter1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("defaultfilter","0");
+                editor.apply();
 
+                PreviewImageActivity.this.isSobelFilter = false;
+                PreviewImageActivity.this.isEdgeFilter = false;
+                PreviewImageActivity.this.isEdgeDifference = false;
+
+                touch.setImageBitmap(getButton1FilteredImage());
+                Toast.makeText(PreviewImageActivity.this, "Default Saved!", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
 
         btnFilter2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PreviewImageActivity.this.isSobelFilter = false;
+                PreviewImageActivity.this.isEdgeFilter = false;
+                PreviewImageActivity.this.isEdgeDifference = false;
+
+                touch.setImageBitmap(getButtonGrayscaleFilteredImage());
+            }
+        });
+
+        btnFilter2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("defaultfilter","1");
+                editor.apply();
+
+                PreviewImageActivity.this.isSobelFilter = false;
+                PreviewImageActivity.this.isEdgeFilter = false;
+                PreviewImageActivity.this.isEdgeDifference = false;
+
+                touch.setImageBitmap(getButtonGrayscaleFilteredImage());
+                Toast.makeText(PreviewImageActivity.this, "Default Saved!", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
+
+        btnFilter3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PreviewImageActivity.this.isSobelFilter = true;
@@ -121,16 +185,52 @@ private String sPath = null;
             }
         });
 
-        btnFilter3.setOnClickListener(new View.OnClickListener() {
+        btnFilter3.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("defaultfilter","2");
+                editor.apply();
+
+                PreviewImageActivity.this.isSobelFilter = true;
+                PreviewImageActivity.this.isEdgeFilter = false;
+                PreviewImageActivity.this.isEdgeDifference = false;
+
+                touch.setImageBitmap(getButton2FilteredImage());
+                Toast.makeText(PreviewImageActivity.this, "Default Saved!", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+
+        btnFilter4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PreviewImageActivity.this.isSobelFilter = false;
                 PreviewImageActivity.this.isEdgeFilter = false;
                 PreviewImageActivity.this.isEdgeDifference = true;
 
-                value = 2;  // Register that it's button 4
+                value = 3;  // Register that it's button 4
 
                 new DoEdgeDifferenceTask().execute((Float)null);
+            }
+        });
+
+        btnFilter4.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("defaultfilter","3");
+                editor.apply();
+
+                PreviewImageActivity.this.isSobelFilter = false;
+                PreviewImageActivity.this.isEdgeFilter = false;
+                PreviewImageActivity.this.isEdgeDifference = true;
+
+                value = 3;  // Register that it's button 4
+
+                new DoEdgeDifferenceTask().execute((Float)null);
+                Toast.makeText(PreviewImageActivity.this, "Default Saved!", Toast.LENGTH_LONG).show();
+                return true;
             }
         });
 
@@ -204,56 +304,37 @@ private String sPath = null;
 
         @Override
         protected void onPreExecute() {
+
+            touchImg = getButton1FilteredImage();
+            imageBlank = Bitmap.createScaledBitmap(touchImg, 250, 350, false);
+            imageBlank.eraseColor(Color.BLACK);
+
+            // Set all buttons to imageBlank to get initial sizing right
+            btnFilter1.setImageBitmap(imageBlank);
+            btnFilter2.setImageBitmap(imageBlank);
+            btnFilter3.setImageBitmap(imageBlank);
+            btnFilter4.setImageBitmap(imageBlank);
+
+            touch.setImageBitmap(touchImg);
         }
 
         @Override
         protected Void doInBackground(String... params) {
             String path = params[0];
 
-            try{   //decode tmp image in internal
-                File f=new File(path, "tmp1.jpg");
-                imagePreview = BitmapFactory.decodeStream(new FileInputStream(f));
+            imageFiltered = imagePreview.copy(imagePreview.getConfig(), imagePreview.isMutable());
 
-                imageFiltered = imagePreview;
+//               // int height = imagePreview.getHeight()/3;
+//               // int width = imagePreview.getWidth()/3;
+//
+//                 //Quarter the size of the bitmap for speed; makes YUGE difference //ryons removed due to not being able to get reasonable quality
+////                imagePreview = Bitmap.createScaledBitmap(
+////                        imagePreview, width*2, height*2, true);
 
-               // int height = imagePreview.getHeight()/3;
-               // int width = imagePreview.getWidth()/3;
-
-                 //Quarter the size of the bitmap for speed; makes YUGE difference // removed due to not being able to get reasonable quality
-//                imagePreview = Bitmap.createScaledBitmap(
-//                        imagePreview, width*2, height*2, true);
-            } catch (FileNotFoundException e) {
-                Log.e("PreviewImageActivity", "LoadMainImageTask: Failed to load and decode preview image.", e);
-            }
-
-            touchImg = getButton1FilteredImage();
-
-            imageBlank = Bitmap.createScaledBitmap(touchImg, 250, 350, false);
-            imageBlank.eraseColor(Color.BLACK);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            // Set all buttons to imageBlank to get initial sizing right
-            btnFilter1.setImageBitmap(imageBlank);
-            btnFilter2.setImageBitmap(imageBlank);
-            btnFilter3.setImageBitmap(imageBlank);
-
-            touch.setImageBitmap(touchImg);
-
-            Bitmap buttonImg;
-
-            buttonImg = Bitmap.createScaledBitmap(
-                    getButton1FilteredImage(), 250, 350, true);
-            btnFilter1.setImageBitmap(buttonImg);
-
-            buttonImg = Bitmap.createScaledBitmap(
-                    getButton2FilteredImage(), 250, 350, true);
-            btnFilter2.setImageBitmap(buttonImg);
-
-            buttonImg = Bitmap.createScaledBitmap(
+            Imgbutton1 =Bitmap.createScaledBitmap(getButton1FilteredImage(), 250, 350, true);
+            Imgbutton2= Bitmap.createScaledBitmap(getButtonGrayscaleFilteredImage(), 250, 350, true);
+            Imgbutton3 = Bitmap.createScaledBitmap(getButton2FilteredImage(), 250, 350, true);
+            Imgbutton4 = Bitmap.createScaledBitmap(
                     // This is a quick-rendering placeholder,
                     // and does NOT reflect the true filter behavior
                     applyFilter(
@@ -261,11 +342,20 @@ private String sPath = null;
                             new GPUImageContrastFilter(0.75f),
                             null ,2, true),
                     250, 350, true);
-            btnFilter3.setImageBitmap(buttonImg);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            btnFilter1.setImageBitmap(Imgbutton1);
+            btnFilter2.setImageBitmap(Imgbutton2);
+            btnFilter3.setImageBitmap(Imgbutton3);
+            btnFilter4.setImageBitmap(Imgbutton4);
 
             progress.setVisibility(View.GONE);  // Might as well put this here as anywhere
             value=0; //after last button is loaded reset callback value to zero (first thumnail option)
-
         }
     }
 
@@ -303,15 +393,21 @@ private String sPath = null;
     private Bitmap getButton1FilteredImage() {
         value = 0;
         Mat imageMat = new Mat();
-        Bitmap src = imagePreview;
+        Bitmap src = imagePreview.copy(imagePreview.getConfig(), imagePreview.isMutable());
         Utils.bitmapToMat(src, imageMat);
         Imgproc.cvtColor(imageMat, imageMat, Imgproc.COLOR_BGR2GRAY);
         Imgproc.GaussianBlur(imageMat, imageMat, new Size(5, 5), 0);
-        Imgproc.adaptiveThreshold(imageMat, imageMat, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 5, 4);
+        Imgproc.adaptiveThreshold(imageMat, imageMat, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 19, 6);
         Utils.matToBitmap(imageMat, src);
-        configFilters(null, null, null, 0, true);
 
         return src;
+    }
+
+    private Bitmap getButtonGrayscaleFilteredImage() {
+        return applyFilter(
+                new GPUImageGrayscaleFilter(),
+                new GPUImageContrastFilter(1.5f),
+                new GPUImageBilateralFilter(), 1, true);
     }
 
 
@@ -319,13 +415,12 @@ private String sPath = null;
         return applyFilter(
                 new GPUImageThresholdEdgeDetection()/*GPUImageSobelThresholdFilter()*/,
                 new GPUImageContrastFilter(2.0f),
-                null ,1, true);
+                null ,2, true);
     }
 
     private Bitmap applyFilter(GPUImageFilter one, GPUImageFilter two, GPUImageFilter three, int val, boolean clear){
 
         GPUImage mGPUImage = new GPUImage(getApplicationContext());
-        mGPUImage.setImage(imagePreview);
 
         filters = configFilters(one, two, three, val, clear);
         System.gc();

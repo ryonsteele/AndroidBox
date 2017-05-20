@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ff000000"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff000000"
     >
 
     <LinearLayout
@@ -15,16 +15,17 @@
         <android.ryons.com.bwtiffimaging.imaging.ZoomableImageView
             android:id="@+id/imageView"
             android:layout_marginBottom="0dp"
-            android:layout_weight="0.7"
             android:layout_width="match_parent"
-            android:layout_height="0dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="0.7"/>
 
-        <!--<com.tms.android.imaging.ZoomableGPUImageView-->
-        <!--android:id="@+id/imageView"-->
-        <!--android:layout_above="@+id/buttonGroup"-->
-        <!--android:layout_marginBottom="0dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+        <TextView android:id="@+id/tvDefault"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="#777777"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Hold Chosen Filter Button To Set As Default!"/>
 
         <LinearLayout
             android:id="@+id/buttonGroup"
@@ -32,6 +33,7 @@
             android:layout_height="0dp"
             android:layout_weight=".15"
             >
+
 
             <ImageButton
                 android:id="@+id/button1"
@@ -47,7 +49,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:scaleType="centerInside"
-                android:text="Simple\n Edge Detect" />
+                android:text="GrayScale" />
 
             <ImageButton
                 android:id="@+id/button3"
@@ -55,41 +57,30 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:scaleType="centerInside"
+                android:text="Simple\n Edge Detect" />
+
+            <ImageButton
+                android:id="@+id/button4"
+                android:layout_weight=".25"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
                 android:text="Complex\n Edge Detect" />
 
-            <!--<ImageButton-->
-                <!--android:id="@+id/button4"-->
-                <!--android:layout_weight=".25"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:scaleType="centerInside"-->
-                <!--android:text="Complex\n Edge Detect" />-->
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/buttonGroup2"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
             android:orientation="vertical"
             android:layout_weight=".15"
             >
 
-            <!--<SeekBar-->
-                <!--android:id="@+id/seekBar1"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="0dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_marginBottom="0dp"-->
-                <!--android:drawingCacheQuality="high"-->
-                <!--android:layerType="hardware"-->
-                <!--android:max="400"-->
-                <!--android:progressDrawable="@drawable/progress"-->
-                <!--android:thumb="@drawable/thumb" />-->
-
             <Button
                 android:id="@+id/button5"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#00b33c"

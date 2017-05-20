@@ -5,8 +5,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,9 +17,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.ryons.com.bwtiffimaging.ContextWrapperInt;
-import android.content.ContextWrapper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -47,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
+import jp.co.cyberagent.android.gpuimage.GPUImageBilateralFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageColorInvertFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageContrastFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -87,7 +90,9 @@ public class CreateImageActivity extends AppCompatActivity {
     String absPath;
     File sendDirectory;
     Boolean firstPass = false;
-    boolean lowRes =false;
+    boolean isFax4 =false;
+    boolean isPreview = false;
+    SharedPreferences preferences;
 
     int temPos = 0;
     String previewPath = "";
@@ -104,7 +109,8 @@ public class CreateImageActivity extends AppCompatActivity {
         pb = (ProgressBar)findViewById(R.id.progressBar);
         pb.setVisibility(View.GONE);
 
-        lowRes = ImageUtils.getBackCameraResolutionInMp();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //lowRes = ImageUtils.getBackCameraResolutionInMp();
         sendDirectory = new File(Environment.getExternalStorageDirectory() + "/tmp");
         if(sendDirectory != null && sendDirectory.exists() && sendDirectory.listFiles() != null ){
             for (File toDel: sendDirectory.listFiles()) {
@@ -329,12 +335,19 @@ public class CreateImageActivity extends AppCompatActivity {
                         }
                         else if (val == 1) {
                             filters.clear();
-                            filters.add(new GPUImageThresholdEdgeDetection());
-                            filters.add(new GPUImageContrastFilter(1.5f));
+                            filters.add(new GPUImageGrayscaleFilter());
+                            filters.add(new GPUImageContrastFilter(2.0f));
+                            filters.add(new GPUImageBilateralFilter());
                         }
                         else if(val == 2) {
                             filters.clear();
+                            filters.add(new GPUImageThresholdEdgeDetection());
+                            filters.add(new GPUImageContrastFilter(1.5f));
                         }
+                        else if(val == 3) {
+                            filters.clear();
+                        }
+
                         File directory = sendDirectory;
                         File mypath = new File(directory, temPos +".png");
                         mypath.delete();
@@ -371,6 +384,12 @@ public class CreateImageActivity extends AppCompatActivity {
                 // Load the original image from [path]
                 FileInputStream fis = new FileInputStream(path);
                 image = BitmapFactory.decodeStream(fis);
+                image = Bitmap.createScaledBitmap(image, 1728, 1728 * image.getHeight()/image.getWidth(), false);
+
+                isPreview = preferences.getBoolean("preview", false);
+
+                if(!isPreview)
+                    image= applyFilterDefault(image);
 
 
                 if(!sendDirectory.exists())
@@ -381,8 +400,8 @@ public class CreateImageActivity extends AppCompatActivity {
                 File myPath = new File(sendDirectory, temPos + ".jpg");
                 if(myPath.exists()){
 
-                        temPos++;
-                        myPath = new File(sendDirectory, temPos + ".jpg");
+                    temPos++;
+                    myPath = new File(sendDirectory, temPos + ".jpg");
                 }
 
                 FileOutputStream fos = null;
@@ -429,6 +448,10 @@ public class CreateImageActivity extends AppCompatActivity {
                                 "You may need to manually select the image from the gallery.",
                         Toast.LENGTH_LONG).show();
             }
+            pd.dismiss();
+
+            if(isPreview && null != image)
+                new PreviewImageTask().execute();
         }
     }
 
@@ -455,6 +478,7 @@ public class CreateImageActivity extends AppCompatActivity {
                 }
 
                 imageUri = Uri.parse(imagePath);
+//                imageFiltered = applyFilter(image);
                 GPUImage mGPUImage = new GPUImage(getApplicationContext());
 
                 // Apply filters set before calling the Task
@@ -463,16 +487,17 @@ public class CreateImageActivity extends AppCompatActivity {
                 // Load the original image from [path]
                 FileInputStream fis = new FileInputStream(path);
                 image = BitmapFactory.decodeStream(fis);
+                image = Bitmap.createScaledBitmap(image, 1728, 1728 * image.getHeight()/image.getWidth(), false);
                 if(val == 0){
-                    image = mGPUImage.getBitmapWithFilterApplied(image);
-                    imageFiltered = applyFilter(image);
+                    imageFiltered = mGPUImage.getBitmapWithFilterApplied(image.copy(image.getConfig(), image.isMutable()));
+                    imageFiltered = applyFilter(imageFiltered);
                 }
-                else if ( val != 2) {
-                    imageFiltered = mGPUImage.getBitmapWithFilterApplied(image);
+                else if ( val != 3) {
+                    imageFiltered = mGPUImage.getBitmapWithFilterApplied(image.copy(image.getConfig(), image.isMutable()));
                 } else {
                     // Val == 3 && !isInitialPreview
                     // Build [imageFiltered] per the big edge filter; apply the contrast too!
-                    imageFiltered = getEdgeDetectSubtractionImage(image, 1.5f)
+                    imageFiltered = getEdgeDetectSubtractionImage(image.copy(image.getConfig(), image.isMutable()), 1.5f)
                             .getBitmapWithFilterApplied();
                 }
 
@@ -527,7 +552,7 @@ public class CreateImageActivity extends AppCompatActivity {
         GPUImage mGPUImage = new GPUImage(getApplicationContext());
         // Apply filters set before calling the Task
         mGPUImage.setFilter(new GPUImageFilterGroup(filters));
-        imageFiltered = mGPUImage.getBitmapWithFilterApplied(image);
+        imageFiltered = mGPUImage.getBitmapWithFilterApplied(image.copy(image.getConfig(), image.isMutable()));
         imageFiltered = applyFilter(imageFiltered);
         Bitmap bmpThumb = Bitmap.createScaledBitmap(imageFiltered, 350, 450, true);
         gridViewAdapter.addItem(new ThumbnailViewItem(bmpThumb, imageUri.getPath()));
@@ -558,14 +583,16 @@ public class CreateImageActivity extends AppCompatActivity {
         try {
             File folder = new File(Environment.getExternalStorageDirectory() + "/tmp/send");
             if (!folder.exists()) {
-               folder.mkdir();
+                folder.mkdir();
             }
 
             BitmapFactory.Options opt = new BitmapFactory.Options();
             Bitmap bitmap =  BitmapFactory.decodeFile(sendDirectory.listFiles()[0].getAbsolutePath(), opt);
             TiffSaver.SaveOptions options = new TiffSaver.SaveOptions();
 
-            if(lowRes)
+            isFax4 = preferences.getBoolean("compression", false);
+
+            if(!isFax4)
                 options.compressionScheme = CompressionScheme.COMPRESSION_LZW;
             else
                 options.compressionScheme = CompressionScheme.COMPRESSION_CCITTFAX4;
@@ -650,10 +677,10 @@ public class CreateImageActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
 
-                Intent searchIntent = new Intent();
-                searchIntent.setClass(getApplicationContext(), PreviewImageActivity.class);
-                searchIntent.putExtra("message", absPath);
-                startActivityForResult(searchIntent, PREVIEW_REQUEST);
+            Intent searchIntent = new Intent();
+            searchIntent.setClass(getApplicationContext(), PreviewImageActivity.class);
+            searchIntent.putExtra("message", absPath);
+            startActivityForResult(searchIntent, PREVIEW_REQUEST);
 
         }
     }
@@ -672,7 +699,9 @@ public class CreateImageActivity extends AppCompatActivity {
             @Override public void run() {
 
                 try {
+
                     byte[] encodedImage = encodeImage();//stream.toByteArray() multipage tiff;
+
                     Log.e(Util.getTag(getApplicationContext()),
                             "Byte Array Size: " + encodedImage.length);
 
@@ -692,6 +721,7 @@ public class CreateImageActivity extends AppCompatActivity {
                     for (int i =0; i < sendDirectory.list().length; i++) {
                         sendDirectory.listFiles()[i].delete();
                     }
+
                 }
             }
         };
@@ -762,14 +792,59 @@ public class CreateImageActivity extends AppCompatActivity {
         return work;
     }
 
+    private Bitmap applyFilterDefault(Bitmap input){
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String sVal = preferences.getString("defaultfilter", null);
+        int val = 0;
+        filters.clear();
+
+        if(sVal != null) val = Integer.parseInt(sVal);
+
+        if (val == 0) {
+            addFirstTryImageFilters();
+        }
+        else if (val == 1) {
+            filters.add(new GPUImageGrayscaleFilter());
+            filters.add(new GPUImageContrastFilter(2.0f));
+            filters.add(new GPUImageBilateralFilter());
+        }
+        else if(val == 2) {
+            filters.add(new GPUImageThresholdEdgeDetection());
+            filters.add(new GPUImageContrastFilter(1.5f));
+        }
+
+
+        GPUImage mGPUImage = new GPUImage(getApplicationContext());
+
+        // Apply filters set before calling the Task
+        mGPUImage.setFilter(new GPUImageFilterGroup(filters));
+
+        if(val == 0){
+            image = mGPUImage.getBitmapWithFilterApplied(image);
+            imageFiltered = applyFilter(image.copy(image.getConfig(), image.isMutable()));
+        }
+        else if ( val != 3) {
+            imageFiltered = mGPUImage.getBitmapWithFilterApplied(image.copy(image.getConfig(), image.isMutable()));
+        } else {
+            // Val == 3 && !isInitialPreview
+            // Build [imageFiltered] per the big edge filter; apply the contrast too!
+            imageFiltered = getEdgeDetectSubtractionImage(image.copy(image.getConfig(), image.isMutable()), 1.5f)
+                    .getBitmapWithFilterApplied();
+        }
+
+        return imageFiltered;
+    }
+
+
     private Bitmap applyFilter(Bitmap input){
 
         Mat imageMat = new Mat();
-        Bitmap src = input;
+        Bitmap src = input.copy(input.getConfig(), input.isMutable());
         Utils.bitmapToMat(src, imageMat);
         Imgproc.cvtColor(imageMat, imageMat, Imgproc.COLOR_BGR2GRAY);
         Imgproc.GaussianBlur(imageMat, imageMat, new Size(5, 5), 0);
-        Imgproc.adaptiveThreshold(imageMat, imageMat, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 5, 4);
+        Imgproc.adaptiveThreshold(imageMat, imageMat, 255, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, 19, 6);
         Utils.matToBitmap(imageMat, src);
 
         return src;
