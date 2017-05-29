@@ -89,6 +89,114 @@
         android:textColor="#081076"
         android:textStyle="bold"/>
 
+    <!-- ****** Term Number ****** -->
+
+    <TextView
+        android:id="@+id/labelDetailTerms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="Number of Terms: "
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/labelDetailParty" />
+
+    <TextView
+        android:id="@+id/txtDetailTerms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/labelDetailTerms"
+        android:layout_alignBaseline="@+id/labelDetailTerms"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        android:gravity="right"
+        android:text="No data available."
+        android:textColor="#081076"
+        android:textStyle="bold"/>
+
+    <!-- ****** In Office ****** -->
+
+    <TextView
+        android:id="@+id/labelDetailinOffice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="Currently in Office: "
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/labelDetailTerms" />
+
+    <TextView
+        android:id="@+id/txtDetailinOffice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/labelDetailinOffice"
+        android:layout_alignBaseline="@+id/labelDetailinOffice"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        android:gravity="right"
+        android:text="No data available."
+        android:textColor="#081076"
+        android:textStyle="bold"/>
+
+    <!-- ****** Twitter ****** -->
+
+    <TextView
+        android:id="@+id/labelDetailTwitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="Twitter: "
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/labelDetailinOffice" />
+
+    <TextView
+        android:id="@+id/txtDetailTwitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/labelDetailTwitter"
+        android:layout_alignBaseline="@+id/labelDetailTwitter"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        android:gravity="right"
+        android:text="No data available."
+        android:textColor="#081076"
+        android:textStyle="bold"/>
+
+    <!-- ****** Facebook ****** -->
+
+    <TextView
+        android:id="@+id/labelDetailYoutube"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:text="Youtube: "
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/labelDetailTwitter" />
+
+    <TextView
+        android:id="@+id/txtDetailYoutube"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/labelDetailYoutube"
+        android:layout_alignBaseline="@+id/labelDetailYoutube"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30dp"
+        android:gravity="right"
+        android:text="No data available."
+        android:textColor="#081076"
+        android:textStyle="bold"/>
+
     <!--<Button-->
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="wrap_content"-->

@@ -18,14 +18,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#980c0c">
+        android:layout_height="match_parent">
+        <!--android:background="#980c0c">-->
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:background="#6D0610"
+            android:background="#908d8d"
             android:text="Senate"
             android:gravity="center_vertical"
             android:textColor="#081076"
@@ -46,6 +46,27 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="5dp"/>
 
+        <TextView
+            android:id="@+id/lblRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Role: "
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="7dp"
+            android:layout_below="@id/txtName"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/txtRole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@id/lblRole"
+            android:layout_alignBaseline="@id/lblRole"
+            android:layout_below="@id/txtName"/>
+
 
         <TextView
             android:id="@+id/txtStateLabel"
@@ -54,8 +75,8 @@
             android:text="State: "
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/txtName"
+            android:layout_marginTop="7dp"
+            android:layout_below="@id/txtRole"
             android:layout_marginLeft="5dp"/>
 
         <TextView
@@ -66,16 +87,19 @@
             android:textStyle="bold"
             android:layout_toRightOf="@id/txtStateLabel"
             android:layout_alignBaseline="@id/txtStateLabel"
-            android:layout_below="@id/txtName"/>
+            android:layout_below="@id/txtRole"/>
 
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:src="@drawable/ic_senate"
-            android:layout_below="@id/txtStateLabel"/>
+            android:layout_below="@id/txtStateLabel"
+            android:padding="1dp"
+            android:cropToPadding="true"
+            android:background="#000000"/>
 
         <TextView
             android:id="@+id/txtTapDetail"
@@ -86,7 +110,7 @@
             android:gravity="center_horizontal"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_below="@id/imageView1"/>
+            android:layout_below="@id/imageView1" />
 
     </RelativeLayout>
 

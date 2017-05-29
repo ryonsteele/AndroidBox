@@ -23,6 +23,10 @@ public class DetailsActivity extends Activity {
     private TextView vName;
     private TextView vTitle;
     private TextView vParty;
+    private TextView vTerms;
+    private TextView vInOffice;
+    private TextView vTwitter;
+    private TextView vYouT;
 
 
     @Override
@@ -43,6 +47,10 @@ public class DetailsActivity extends Activity {
         vName =  (TextView) findViewById(R.id.txtDetailName);
         vTitle = (TextView)  findViewById(R.id.txtDetailTitle);
         vParty = (TextView)  findViewById(R.id.txtDetailParty);
+        vTerms = (TextView) findViewById(R.id.txtDetailTerms);
+        vInOffice = (TextView) findViewById(R.id.txtDetailinOffice);
+        vTwitter = (TextView) findViewById(R.id.txtDetailTwitter);
+        vYouT = (TextView) findViewById(R.id.txtDetailYoutube);
 
         vName.setText(dataDetail.getFirstName() + " " + dataDetail.getMiddleName() + " " + dataDetail.getLastName());
         vTitle.setText(rolesList.get(0).getTitle());
@@ -52,6 +60,17 @@ public class DetailsActivity extends Activity {
             vParty.setText("Democratic Party");
         else
             vParty.setText("Independent");
+        if(rolesList != null && rolesList.size() > 0)
+        vTerms.setText(Integer.toString(rolesList.size()));
+
+        if(dataDetail.getInOffice().equalsIgnoreCase("false"))
+            vInOffice.setText("No");
+        else
+            vInOffice.setText("Yes");
+
+        vTwitter.setText(dataDetail.getTwitterAccount());
+        vYouT.setText(dataDetail.getYoutubeAccount());
+
 
     }
 }

@@ -28,18 +28,21 @@ public class FindItemsInteractorImpl implements FindItemsInteractor {
                 MemberService serviceAPI = RestClient.getClient();
                  states = getStates();
 
-                for(String state : states.values()) {
+                for(final String state : states.values()) {
                     Call<CongressResults> loadSizeCall = serviceAPI.loadSenate(state);
                     loadSizeCall.enqueue(new Callback<CongressResults>() {
                         @Override
                         public void onResponse(Call<CongressResults> call, Response<CongressResults> response) {
 
                             CongressResults test = response.body();
-                           // Result result = test.getResults().get(0);
-//                        members = result.getMembers();
 
-                          if(test.getResults() != null)
-                            members.addAll(test.getResults());
+                          if(test.getResults() != null) {
+                              List<Member> temp = test.getResults();
+                              for(Member tMemb : temp){
+                                  tMemb.setState(state);
+                              }
+                              members.addAll(test.getResults());
+                          }
 
                         if (members != null && loop == states.size())
                             listener.onFinished(members);
@@ -101,7 +104,6 @@ public class FindItemsInteractorImpl implements FindItemsInteractor {
         states.put("Montana","MT");
         states.put("Nebraska","NE");
         states.put("Nevada","NV");
-        states.put("New Brunswick","NB");
         states.put("New Hampshire","NH");
         states.put("New Jersey","NJ");
         states.put("New Mexico","NM");
@@ -119,7 +121,6 @@ public class FindItemsInteractorImpl implements FindItemsInteractor {
         states.put("Pennsylvania","PA");
         states.put("Prince Edward Island","PE");
         states.put("Puerto Rico","PR");
-        states.put("Quebec","QC");
         states.put("Rhode Island","RI");
         states.put("Saskatchewan","SK");
         states.put("South Carolina","SC");
@@ -135,6 +136,7 @@ public class FindItemsInteractorImpl implements FindItemsInteractor {
         states.put("Wisconsin","WI");
         states.put("Wyoming","WY");
         states.put("Yukon Territory","YT");
+
         return states;
     }
 }

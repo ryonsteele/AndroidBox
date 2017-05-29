@@ -3,11 +3,14 @@ package com.politipoint.android.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.politipoint.android.Util.ImageUrl;
 import com.politipoint.android.Util.MemberService;
 import com.politipoint.android.Util.RestClient;
 import com.politipoint.android.app.R;
@@ -121,35 +125,44 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
         @Override
         public void onBindViewHolder(MemberViewHolder contactViewHolder, int i) {
             Member ci = memberList.get(i);
+
             contactViewHolder.vName.setText(ci.getName()+ " (" + ci.getParty() + ")");
-            //contactViewHolder.vStateLabel.setText(ci.getLastName());
-            contactViewHolder.vState.setText(ci.getRole());
-            //contactViewHolder.vTitle.setText(ci.getFirstName() + " " + ci.getLastName());
-            new DownloadImageTask((ImageView)  contactViewHolder.vImage).execute("http://vote-al.org/Image.aspx?Id=ALSessionsJeff&Col=Headshot100&Def=Headshot100");
+            contactViewHolder.vRole.setText(ci.getRole());
+            contactViewHolder.vState.setText(ci.getState());
+            String img = ImageUrl.getImage(ci.getId());
+            if(img != null) new DownloadImageTask((ImageView)  contactViewHolder.vImage).execute(img);
             contactViewHolder.vName.setTag(Integer.valueOf(i));
         }
 
-        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        private class DownloadImageTask extends AsyncTask<String, Void, RoundedBitmapDrawable> {
             ImageView bmImage;
 
             public DownloadImageTask(ImageView bmImage) {
                 this.bmImage = bmImage;
             }
 
-            protected Bitmap doInBackground(String... urls) {
+            protected RoundedBitmapDrawable doInBackground(String... urls) {
                 String urldisplay = urls[0];
                 Bitmap mIcon11 = null;
+                RoundedBitmapDrawable dr = null;
                 try {
                     InputStream in = new java.net.URL(urldisplay).openStream();
                     mIcon11 = BitmapFactory.decodeStream(in);
+                    mIcon11 = Bitmap.createScaledBitmap(mIcon11, 400, 500, false);
+                    Resources res = getResources();
+                    dr = RoundedBitmapDrawableFactory.create(res, mIcon11);
+                    dr.setCornerRadius(Math.max(mIcon11.getWidth(), mIcon11.getHeight()) / 1.0f);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return mIcon11;
+                //return mIcon11;
+                return dr;
             }
 
-            protected void onPostExecute(Bitmap result) {
-                bmImage.setImageBitmap(Bitmap.createScaledBitmap(result, 400, 500, false));
+            protected void onPostExecute(RoundedBitmapDrawable result) {
+                bmImage.setImageDrawable(result);
+                //bmImage.setImageBitmap(Bitmap.createScaledBitmap(result, 400, 500, false));
             }}
 
         @Override
@@ -178,6 +191,7 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
 
             protected TextView vName;
             protected TextView vStateLabel;
+             protected TextView vRole;
             protected TextView vState;
             protected TextView vTitle;
             protected ImageView vImage;
@@ -187,6 +201,7 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
 
                 vName =  (TextView) v.findViewById(R.id.txtName);
                 vStateLabel = (TextView)  v.findViewById(R.id.txtStateLabel);
+                vRole = (TextView)  v.findViewById(R.id.txtRole);
                 vState = (TextView)  v.findViewById(R.id.txtState);
                 vTitle = (TextView) v.findViewById(R.id.title);
                 vImage = (ImageView) v.findViewById(R.id.imageView1);

@@ -41,6 +41,7 @@ public class Member implements Serializable
     @SerializedName("api_uri")
     @Expose
     private String apiUri;
+    private String state;
     private final static long serialVersionUID = 1509728427648709982L;
 
     /**
@@ -165,6 +166,14 @@ public class Member implements Serializable
 
     public void setApiUri(String apiUri) {
         this.apiUri = apiUri;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String vstate) {
+        this.state = vstate;
     }
 
 }
