@@ -2,8 +2,7 @@
 <resources>
 
     <string name="app_name">Politipoint</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Filter By State</string>
     <string name="log_in">Filling the seats......</string>
     <string name="title_activity_main">Politipoint</string>
 

@@ -1,6 +1,7 @@
 package com.politipoint.android.main;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -48,7 +49,7 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = new MainPresenterImpl(this, new FindItemsInteractorImpl());
+        presenter = new MainPresenterImpl(this, new FindItemsInteractorImpl(), new FilterItemsInteractorImpl());
 
         setContentView(R.layout.activity_my);
         recList = (RecyclerView) findViewById(R.id.cardList);
@@ -73,6 +74,10 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
+                FragmentManager fm = getFragmentManager();
+                FilterFragment dialogFragment = new FilterFragment ();
+                dialogFragment.show(fm, "Filter Fragment");
+               // presenter.onFilter("AL");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -106,6 +111,11 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
         presenter.onItemClicked(recList.getChildLayoutPosition(view));
     }
 
+
+    public void onUserSelectValue(String selectedValue) {
+        presenter.onFilter(selectedValue);
+    }
+
     public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.MemberViewHolder> {
 
         private List<Member> memberList;
@@ -130,7 +140,8 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
             contactViewHolder.vRole.setText(ci.getRole());
             contactViewHolder.vState.setText(ci.getState());
             String img = ImageUrl.getImage(ci.getId());
-            if(img != null) new DownloadImageTask((ImageView)  contactViewHolder.vImage).execute(img);
+            if(img == null || img.isEmpty()) img = "http://thecollaboratory.wdfiles.com/local--files/american-government-2013/united-states-president-symbol-logo.jpg";
+            new DownloadImageTask((ImageView)  contactViewHolder.vImage).execute(img);
             contactViewHolder.vName.setTag(Integer.valueOf(i));
         }
 

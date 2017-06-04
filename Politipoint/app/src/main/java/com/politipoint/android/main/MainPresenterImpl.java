@@ -4,14 +4,16 @@ import com.politipoint.android.models.Member;
 
 import java.util.List;
 
-public class MainPresenterImpl implements MainPresenter, FindItemsInteractor.OnFinishedListener {
+public class MainPresenterImpl implements MainPresenter, FindItemsInteractor.OnFinishedListener, FilterItemsInteractor.OnFinishedListener {
 
     private MainView mainView;
     private FindItemsInteractor findItemsInteractor;
+    private FilterItemsInteractor filterItemsInteractor;
 
-    public MainPresenterImpl(MainView mainView, FindItemsInteractor findItemsInteractor) {
+    public MainPresenterImpl(MainView mainView, FindItemsInteractor findItemsInteractor, FilterItemsInteractor filterItemsInteractor) {
         this.mainView = mainView;
         this.findItemsInteractor = findItemsInteractor;
+        this.filterItemsInteractor = filterItemsInteractor;
     }
 
     @Override public void onResume() {
@@ -37,6 +39,10 @@ public class MainPresenterImpl implements MainPresenter, FindItemsInteractor.OnF
             mainView.setItems(items);
             mainView.hideProgress();
         }
+    }
+
+    @Override public void onFilter(String val){
+      filterItemsInteractor.filterItems(this, val);
     }
 
     public MainView getMainView() {
